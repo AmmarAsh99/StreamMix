@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -12,18 +13,12 @@ export class StreamService {
 
   async fetchVid(url: string) {
     try {
-      //httpservice return Observable -> to turn it to promise we use FirstValueFrom to accses underlying response object
       const response = await firstValueFrom(
         this.httpService.get(url, { responseType: 'stream' }),
       );
-      // the issue is we download the full vid then we response back
-      // sol : insted of download the vid we send the data immediatly as chuncks
       return response.data;
     } catch (error) {
-      throw new HttpException(
-        'failed to fetch the vid',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Cannot Fetch video');
     }
   }
 }

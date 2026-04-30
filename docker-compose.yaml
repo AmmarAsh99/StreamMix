@@ -1,0 +1,62 @@
+services:
+  angular-app:
+    container_name: angular-container
+    build: frontend/stream-client
+    env_file:
+      - .env
+    ports:
+      - $ANGULAR_APP_LOCAL_PORT:$ANGUlAR_APP_DOCKER_PORT
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/stream-client/src
+          target: /usr/src/app/src
+          ignore:
+            - node_modules/
+
+  nestjs-app:
+    container_name: nestjs-container
+    depends_on:
+      - mysql-db
+    build: ./backend
+    env_file:
+      - .env
+    ports:
+      - $NESTJS_APP_LOCAL_PORT:$NESTJS_APP_DOCKER_PORT
+    environment:
+      - ANGULAR_URL=$ANGULAR_APP_URL
+      - DB_HOST=$MYSQLDB_HOST
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_PASSWORD
+      - DB_DATABASE=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend/src
+          target: /usr/src/app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    volumes:
+      - backend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mysql-db:
+    container_name: mysql-container
+    image: mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQLDB_PASSWORD
+      MYSQL_DATABASE: $MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - mysql-volume:/var/lib/mysql:rw
+
+volumes:
+  mysql-volume:
+  backend:

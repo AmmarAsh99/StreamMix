@@ -1,0 +1,31 @@
+# Dependency directories
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build artifacts
+dist
+coverage
+
+# Environment and sensitive data
+.env
+.env.*
+
+# Docker-related files (not needed inside the image)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Source control
+.git
+.gitignore
+
+# IDE settings
+.vscode
+.idea
+.editorconfig
+
+# Testing and linting
+test
+.eslintrc.js
+.prettierrc
