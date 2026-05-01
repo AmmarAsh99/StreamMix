@@ -2,7 +2,7 @@
 name: Build and Push Docker Image
 # trigger only when code pushed in main branch
 on:
-  Push:
+  push:
     branches:
       - main
 # job definition create temp linux machine ( runner )
@@ -14,22 +14,27 @@ jobs:
       # first checkout step : clone the repo in the runner machine
       - name: Checkout
         uses: actions/checkout@v6
-      # this step is for autmate tage and branch name and commit SHA
-      - name: Extract Docker image metadata
-        id: meta
+
+      - name: Backend metadatat
+        id: meta-backend
         uses: docker/metadata-action@v6
         with:
-          images: ${{ vars.DOCKER_USERNAME }}/my-image
-      # authenticate with docker hub
-      - name: Login to Docker Hub
+          images: ${{vars.DOCKER_USERNAME}}/streamix-backend
+
+      - name: Frontend metadatat
+        id: meta-Frontend
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{var.DOCKER_USERNAME}}/streamix-Frontend
+
+      - name: Docker login
         uses: docker/login-action@v4
         with:
           username: ${{vars.DOCKER_USERNAME}}
           password: ${{vars.DOCKER_PASSWORD}}
-      # build and push the image step
-      - name: Build and Push Docker image
+
+      - name: Build and Push Frontend image
         uses: docker/build-push-action@v7
         with:
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          annotations: ${{ steps.meta.outputs.annotations }}
+          context: ./frontend/stream-client
+          tags: ${{steps.meta-Frontend.output.tags}}
