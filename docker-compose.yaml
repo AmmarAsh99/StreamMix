@@ -1,7 +1,7 @@
 services:
   angular-app:
     container_name: angular-container
-    build: frontend/stream-client
+    image: ammaralshari/streammix-frontend
     env_file:
       - .env
     ports:
@@ -18,7 +18,7 @@ services:
     container_name: nestjs-container
     depends_on:
       - mysql-db
-    build: ./backend
+    image: ammaralshari/streammix-backend
     env_file:
       - .env
     ports:

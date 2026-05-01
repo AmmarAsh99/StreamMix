@@ -5,15 +5,3 @@ COPY . ./
 RUN npm install -g @angular/cli
 RUN npm install
 CMD ["ng", "serve", "--host", "0.0.0.0"]
-
-# FROM node:lts-slim AS build
-# WORKDIR /src
-# RUN npm install -g @angular/cli
-# COPY package*.json ./
-# COPY . ./
-# RUN npm ci
-# RUN ng build --configuration=production
-
-# FROM nginx:stable AS final
-# EXPOSE 80
-# COPY --from=build src/dist/stream-client/browser  /usr/share/nginx/html
