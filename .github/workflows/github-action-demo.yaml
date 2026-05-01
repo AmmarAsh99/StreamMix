@@ -50,6 +50,6 @@ jobs:
           docker build ./backend -t ${{ vars.DOCKER_USERNAME }}/streammix-backend:latest
       - name: login to docker Hub and push
         run: |
-          docker login -u ${{vars.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ vars.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push ${{ vars.DOCKER_USERNAME }}/streammix-frontend:latest
           docker push ${{ vars.DOCKER_USERNAME }}/streammix-backend:latest
