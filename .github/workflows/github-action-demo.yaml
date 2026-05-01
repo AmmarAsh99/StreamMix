@@ -1,18 +1,35 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+# name of the workflow
+name: Build and Push Docker Image
+# trigger only when code pushed in main branch
+on:
+  Push:
+    branches:
+      - main
+# job definition create temp linux machine ( runner )
 jobs:
-  Explore-GitHub-Actions:
+  build:
     runs-on: ubuntu-latest
+    # steps work
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      # first checkout step : clone the repo in the runner machine
+      - name: Checkout
         uses: actions/checkout@v6
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      # this step is for autmate tage and branch name and commit SHA
+      - name: Extract Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ vars.DOCKER_USERNAME }}/my-image
+      # authenticate with docker hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{vars.DOCKER_USERNAME}}
+          password: ${{vars.DOCKER_PASSWORD}}
+      # build and push the image step
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v7
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          annotations: ${{ steps.meta.outputs.annotations }}
