@@ -1,40 +1,46 @@
-# name of the workflow
 name: Build and Push Docker Image
-# trigger only when code pushed in main branch
+
 on:
   push:
     branches:
       - main
-# job definition create temp linux machine ( runner )
+
 jobs:
-  build:
+  publish_images:
     runs-on: ubuntu-latest
-    # steps work
+
     steps:
-      # first checkout step : clone the repo in the runner machine
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Backend metadatat
+      - name: Frontend metadata
+        id: meta-frontend
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{vars.DOCKER_USERNAME}}/streammix-frontend
+
+      - name: Backend metadata
         id: meta-backend
         uses: docker/metadata-action@v6
         with:
-          images: ${{vars.DOCKER_USERNAME}}/streamix-backend
+          images: ${{vars.DOCKER_USERNAME}}/streammix-backend
 
-      - name: Frontend metadatat
-        id: meta-Frontend
-        uses: docker/metadata-action@v6
-        with:
-          images: ${{var.DOCKER_USERNAME}}/streamix-Frontend
-
-      - name: Docker login
+      - name: Log in to Docker Hub
         uses: docker/login-action@v4
         with:
-          username: ${{vars.DOCKER_USERNAME}}
-          password: ${{vars.DOCKER_PASSWORD}}
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Frontend image
+      - name: Build backend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+
+      - name: Build frontend
         uses: docker/build-push-action@v7
         with:
           context: ./frontend/stream-client
-          tags: ${{steps.meta-Frontend.output.tags}}
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
