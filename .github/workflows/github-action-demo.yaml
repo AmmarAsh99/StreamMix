@@ -13,43 +13,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      # - name: Frontend metadata
-      #   id: meta-frontend
-      #   uses: docker/metadata-action@v6
-      #   with:
-      #     images: ${{vars.DOCKER_USERNAME}}/streammix-frontend
+      - name: Frontend metadata
+        id: meta-frontend
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{vars.DOCKER_USERNAME}}/streammix-frontend
 
-      # - name: Backend metadata
-      #   id: meta-backend
-      #   uses: docker/metadata-action@v6
-      #   with:
-      #     images: ${{vars.DOCKER_USERNAME}}/streammix-backend
+      - name: Backend metadata
+        id: meta-backend
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{vars.DOCKER_USERNAME}}/streammix-backend
 
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v4
-      #   with:
-      #     username: ${{ vars.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # - name: Build backend
-      #   uses: docker/build-push-action@v7
-      #   with:
-      #     context: ./backend
-      #     push: true
-      #     tags: ${{ steps.meta-backend.outputs.tags }}
+      - name: Build backend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
 
-      # - name: Build frontend
-      #   uses: docker/build-push-action@v7
-      #   with:
-      #     context: ./frontend/stream-client
-      #     push: true
-      #     tags: ${{ steps.meta-frontend.outputs.tags }}
-      - name: build the images
-        run: |
-          docker build ./frontend/stream-client -t ${{ vars.DOCKER_USERNAME }}/streammix-frontend:latest
-          docker build ./backend -t ${{ vars.DOCKER_USERNAME }}/streammix-backend:latest
-      - name: login to docker Hub and push
-        run: |
-          docker login -u ${{ vars.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ vars.DOCKER_USERNAME }}/streammix-frontend:latest
-          docker push ${{ vars.DOCKER_USERNAME }}/streammix-backend:latest
+      - name: Build frontend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./frontend/stream-client
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}

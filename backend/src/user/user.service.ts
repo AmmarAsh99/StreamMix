@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
 } from '@nestjs/common';
@@ -30,5 +29,9 @@ export class UserService {
     });
 
     return this.userRepo.save(newUser);
+  }
+
+  async findUserByEmail(email: string) {
+    return this.userRepo.findOneBy({ email: email });
   }
 }
