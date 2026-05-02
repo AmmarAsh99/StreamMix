@@ -1,7 +1,7 @@
 services:
   angular-app:
     container_name: angular-container
-    image: ammaralshari/streammix-frontend:main
+    build: ./frontend/stream-client
     env_file:
       - .env
     ports:
@@ -18,7 +18,7 @@ services:
     container_name: nestjs-container
     depends_on:
       - mysql-db
-    image: ammaralshari/streammix-backend:main
+    build: ./backend
     env_file:
       - .env
     ports:
@@ -30,6 +30,7 @@ services:
       - DB_PASSWORD=$MYSQLDB_PASSWORD
       - DB_DATABASE=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
+      - JWT_SECRET=$JWT_SECRET
     develop:
       watch:
         - action: sync+restart
@@ -56,4 +57,3 @@ services:
 
 volumes:
   mysql-volume:
-
