@@ -38,8 +38,6 @@ services:
           target: /usr/src/app/src
           ignore:
             - node_modules/
-        - action: rebuild
-          path: package.json
 
   mysql-db:
     container_name: mysql-container
