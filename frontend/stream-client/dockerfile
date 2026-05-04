@@ -10,3 +10,4 @@ RUN ng build --configuration=production
 
 FROM nginx:stable AS final
 COPY --from=build src/dist/stream-client/browser  /usr/share/nginx/html
+CMD ["nginx", "-g", "daemon off;"]
