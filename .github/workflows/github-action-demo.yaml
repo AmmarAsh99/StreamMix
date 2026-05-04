@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Images
 
 on:
   push:
@@ -6,24 +6,12 @@ on:
       - main
 
 jobs:
-  publish_images:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v6
-
-      - name: Frontend metadata
-        id: meta-frontend
-        uses: docker/metadata-action@v6
-        with:
-          images: ${{vars.DOCKER_USERNAME}}/streammix-frontend
-
-      - name: Backend metadata
-        id: meta-backend
-        uses: docker/metadata-action@v6
-        with:
-          images: ${{vars.DOCKER_USERNAME}}/streammix-backend
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v4
@@ -31,16 +19,22 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build backend
-        uses: docker/build-push-action@v7
-        with:
-          context: ./backend
-          push: true
-          tags: ${{ steps.meta-backend.outputs.tags }}
-
-      - name: Build frontend
+      # ---------------- FRONTEND ----------------
+      - name: Build & Push Frontend
         uses: docker/build-push-action@v7
         with:
           context: ./frontend/stream-client
           push: true
-          tags: ${{ steps.meta-frontend.outputs.tags }}
+          tags: |
+            ${{ vars.DOCKER_USERNAME }}/streammix-frontend:${{ github.sha }}
+            ${{ vars.DOCKER_USERNAME }}/streammix-frontend:latest
+
+      # ---------------- BACKEND ----------------
+      - name: Build & Push Backend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ vars.DOCKER_USERNAME }}/streammix-backend:${{ github.sha }}
+            ${{ vars.DOCKER_USERNAME }}/streammix-backend:latest

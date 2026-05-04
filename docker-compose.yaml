@@ -1,18 +1,11 @@
 services:
   angular-app:
     container_name: angular-container
-    build: ./frontend/stream-client
+    image: ammaralshari/streammix-frontend:main
     env_file:
       - .env
     ports:
       - $ANGULAR_APP_LOCAL_PORT:$ANGUlAR_APP_DOCKER_PORT
-    develop:
-      watch:
-        - action: sync
-          path: ./frontend/stream-client/src
-          target: /usr/src/app/src
-          ignore:
-            - node_modules/
 
   nestjs-app:
     container_name: nestjs-container
@@ -31,13 +24,6 @@ services:
       - DB_DATABASE=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       - JWT_SECRET=$JWT_SECRET
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./backend/src
-          target: /usr/src/app/src
-          ignore:
-            - node_modules/
 
   mysql-db:
     container_name: mysql-container
