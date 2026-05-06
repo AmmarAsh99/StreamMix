@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: frontend-config
 data:
-  ANGULAR_URL: frontend-service
+  ANGULAR_URL: http://localhost:4200
