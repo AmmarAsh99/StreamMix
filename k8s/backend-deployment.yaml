@@ -17,6 +17,7 @@ spec:
       containers:
         - name: nest-container
           image: ammaralshari/streammix-backend
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           envFrom:
