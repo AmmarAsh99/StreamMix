@@ -1,21 +1,21 @@
 services:
   angular-app:
     container_name: angular-container
-    image: ammaralshari/streammix-frontend:main
+    build: ./frontend/stream-client
     env_file:
       - .env
     ports:
-      - $ANGULAR_APP_LOCAL_PORT:$ANGUlAR_APP_DOCKER_PORT
+      - 4200:80
 
   nestjs-app:
     container_name: nestjs-container
     depends_on:
       - mysql-db
-    build: ./backend
+    build: /backend
     env_file:
       - .env
     ports:
-      - $NESTJS_APP_LOCAL_PORT:$NESTJS_APP_DOCKER_PORT
+      - 3000:3000
     environment:
       - ANGULAR_URL=$ANGULAR_APP_URL
       - DB_HOST=$MYSQLDB_HOST

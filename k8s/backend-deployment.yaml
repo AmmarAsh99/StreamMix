@@ -39,11 +39,9 @@ kind: Service
 metadata:
   name: nest-service
 spec:
-  type: NodePort
   selector:
     app: nest
   ports:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-      nodePort: 30010
