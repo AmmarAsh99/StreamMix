@@ -32,6 +32,12 @@ export class UserService {
   }
 
   async findUserByEmail(email: string) {
+    // SELECT * FROM user WHERE email = email
     return this.userRepo.findOneBy({ email: email });
+    // {
+    //   id: 1
+    //   email: dsdadsadas
+    //   pass:dsadasdas
+    // }
   }
 }

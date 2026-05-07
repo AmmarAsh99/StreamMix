@@ -11,7 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { AuthGuard } from './auth.guard';
-
+// http://localhost:3000/auth/login
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
