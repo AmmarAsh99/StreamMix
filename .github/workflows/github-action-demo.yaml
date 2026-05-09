@@ -64,6 +64,7 @@ jobs:
         with:
           repository: AmmarAsh99/streammix-gitops
           path: streammix-gitops
+          token: ${{ secrets.GH_PAT }}
 
       - name: Update Manifests
         run: |
