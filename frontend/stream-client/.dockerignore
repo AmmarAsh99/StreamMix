@@ -24,3 +24,6 @@
 LICENSE
 README.md
 **/.angular
+dist/
+node_modules/
+.git/
