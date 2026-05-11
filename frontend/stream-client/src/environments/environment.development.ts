@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: '/user',
+  apiUrl: 'http://steammix.com',
 };
