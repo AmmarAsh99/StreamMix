@@ -5,7 +5,7 @@ import { UserService } from '../../api/user.service';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [RouterLink, FormsModule],
+  imports: [FormsModule],
   templateUrl: './sign-up.html',
   styleUrl: './sign-up.css',
 })
