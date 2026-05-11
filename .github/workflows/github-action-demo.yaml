@@ -68,9 +68,8 @@ jobs:
 
       - name: Update Manifests
         run: |
-          sed -i "s|streammix-frontend:.*|streammix-frontend:${{ github.sha }}|g" streammix-gitops/frontend/frontend-deployment.yaml
-
-          sed -i "s|streammix-backend:.*|streammix-backend:${{ github.sha }}|g" streammix-gitops/backend/backend-deployment.yaml
+          sed -i "s|image: .*/streammix-frontend:.*|image: ${{ vars.DOCKER_USERNAME }}/streammix-frontend:${{ github.sha }}|g" streammix-gitops/frontend/frontend-deployment.yaml
+          sed -i "s|image: .*/streammix-backend:.*|image: ${{ vars.DOCKER_USERNAME }}/streammix-backend:${{ github.sha }}|g" streammix-gitops/backend/backend-deployment.yaml
 
       - name: Commit and Push
         run: |
