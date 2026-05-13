@@ -11,18 +11,13 @@ import {
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { AuthGuard } from './auth.guard';
-// http://localhost:3000/auth/login
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() signInDto: SignInDto) {
-    const data = await this.authService.signIn(
-      signInDto.email,
-      signInDto.password,
-    );
-    return { message: 'user validated', data: data };
+    return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
   @UseGuards(AuthGuard)

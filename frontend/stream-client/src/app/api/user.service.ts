@@ -11,4 +11,7 @@ export class UserService {
   createUser(credentials: { email: string; password: string }) {
     return this.http.post(`${this.backend}/user`, credentials);
   }
+  loginUser(credentials: { email: string; password: string }) {
+    return this.http.post(`${this.backend}/auth/login`, credentials);
+  }
 }

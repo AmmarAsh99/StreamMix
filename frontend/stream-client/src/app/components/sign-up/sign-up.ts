@@ -1,38 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../api/user.service';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './sign-up.html',
   styleUrl: './sign-up.css',
 })
 export class SignUp {
   email = '';
   password = '';
-  isLoading = false;
   constructor(
     private userService: UserService,
     private router: Router,
   ) {}
 
+  errorMessage = signal('');
+  isLoading = signal(false);
   onSubmit() {
-    if (this.isLoading) {
-      this.isLoading = true;
-    }
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
     const user = {
       email: this.email,
       password: this.password,
     };
     this.userService.createUser(user).subscribe({
-      next: (value) => {
+      next: () => {
         this.router.navigate(['/stream']);
       },
       error: (err) => {
-        console.log('Sign up failed', err);
-        this.isLoading = false;
+        this.isLoading.set(false);
+        if (err.status === 401) {
+          this.errorMessage.set('Invalid email or password.');
+        } else if (err.status === 0) {
+          this.errorMessage.set('Cannot reach server. Check your connection.');
+        } else {
+          this.errorMessage.set('Something went wrong. Please try again.');
+        }
       },
     });
   }
