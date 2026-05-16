@@ -7,7 +7,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 @Controller('stream')
 export class StreamController {
   constructor(private getFetch: StreamService) {}
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get()
   async getVideo(@Query() query: CheckUrl, @Res() res: Response) {
     const stream = await this.getFetch.fetchVid(query.url);

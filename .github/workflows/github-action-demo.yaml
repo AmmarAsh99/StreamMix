@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-
-# This allows the Action to push the updated YAML back to your repo
 permissions:
   contents: write
 
