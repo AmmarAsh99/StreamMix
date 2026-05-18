@@ -1,17 +1,27 @@
 services:
   angular-app:
     container_name: angular-container
-    build: ./frontend/stream-client
-    env_file:
-      - .env
+    build:
+      context: ./frontend/stream-client
+      target: development
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/stream-client/src
+          target: /app/src
+          initial_sync: true
+          ignore:
+            - node_modules/
     ports:
-      - 4200:80
+      - 4200:4200
 
   nestjs-app:
     container_name: nestjs-container
     depends_on:
       - mysql-db
-    build: /backend
+    build:
+      context: /backend
+      target: development
     env_file:
       - .env
     ports:
@@ -24,6 +34,14 @@ services:
       - DB_DATABASE=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       - JWT_SECRET=$JWT_SECRET
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend/src
+          target: /app/src
+          initial_sync: true
+          ignore:
+            - node_modules/
 
   mysql-db:
     container_name: mysql-container

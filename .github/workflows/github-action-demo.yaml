@@ -24,6 +24,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./frontend/stream-client
+          target: production
           push: true
           tags: |
             ${{ vars.DOCKER_USERNAME }}/streammix-frontend:${{ github.sha }}
@@ -45,6 +46,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
+          target: production
           push: true
           tags: |
             ${{ vars.DOCKER_USERNAME }}/streammix-backend:${{ github.sha }}
