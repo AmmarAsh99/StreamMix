@@ -16,6 +16,8 @@ export class StreamService {
       const response = await firstValueFrom(
         this.httpService.get(url, { responseType: 'stream' }),
       );
+      console.log('[Axios Stream Status]:', response.status);
+      console.log('[Axios Stream Headers]:', response.headers);
       return response.data;
     } catch (error) {
       throw new BadRequestException('Cannot Fetch video');
